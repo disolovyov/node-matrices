@@ -53,8 +53,9 @@ buildBrowser = ->
       makeDir 'build'
       makeDir 'build/' + matrices.VERSION
       dir = fs.realpathSync 'build/' + matrices.VERSION
-      fs.writeFileSync dir + '/pablo.js', header + src + footer
-      fs.writeFileSync dir + '/pablo.min.js', header + uglify(src + footer)
+      src += footer
+      fs.writeFileSync dir + '/node-matrices.js', header + src
+      fs.writeFileSync dir + '/node-matrices.min.js', header + uglify(src)
       tryExec "rm -f build/edge && ln -s #{dir}/ build/edge"
 
 # Build task for Node.
