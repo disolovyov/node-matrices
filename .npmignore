@@ -1,0 +1,6 @@
+.git*
+build/
+Cakefile
+docs/
+examples/
+src/
