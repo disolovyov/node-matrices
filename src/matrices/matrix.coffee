@@ -110,10 +110,17 @@ module.exports = class Matrix
     endRows ?= @rows
     @sliceRows(beginRows, endRows).sliceCols(beginCols, endCols)
 
-  # Calculate the inverse matrix.
+  # U(L^-1)P decomposition of the current matrix.
+  # Result is in the form of {upper, lower, perm, det}, where:
   #
-  # **NB!** Exceptions for noninvertible matrices are currently not thrown.
-  inverse: ->
+  # * *upper* is the upper triangular matrix
+  # * *lower* is the inverse of lower triangular matrix
+  # * *perm* is the permutations list
+  # * *det* is the determinant
+  #
+  # This method is used internally for determinant calculation and
+  # for finding inverse matrices.
+  decompose = ->
     # Exit with an error, if the matrix is not square.
     if @rows isnt @cols
       throw new Error 'Dimensionality mismatch'
@@ -122,69 +129,101 @@ module.exports = class Matrix
     # These are a direct clone of the current matrix,
     # and an identity matrix of the same size.
     #
-    # When the direct clone is reduced to an identity matrix,
-    # the other (initially identity) matrix should become the inverse.
-    m = @clone()
-    inv = Matrix.identity size
+    # When the direct clone is reduced to the upper triangular matrix,
+    # the other (initially identity) matrix should become the inverse
+    # of lower triangular matrix.
+    size = @rows
+    upper = @clone()
+    lower = Matrix.identity size
 
     # To avoid swapping rows in the matrix itself during pivoting,
     # a special array is used for indirect indexing.
     #
-    # With this array, to get the ij matrix element:
+    # With this array, to get the *ij* matrix element:
     #
-    #     m.get(row[i], j)
-    size = @rows
+    #     upper.get(row[i], j)
     row = (i for i in [0...size] by 1)
 
-    # Reduce the matrix to upper triangular form using
-    # Gaussian elimination with pivoting.
+    # Perform the decomposition
+    # using Gaussian elimination with pivoting.
+    # Calculate the determinant along the way.
+    det = 1
     for i in [0...size] by 1
 
       # Find pivot.
       pivot = i
-      pivotVal = m.get row[pivot], i
+      pivotVal = upper.get row[pivot], i
       for j in [i + 1...size] by 1
         test = j
-        testVal = m.get row[test], i
+        testVal = upper.get row[test], i
         if Math.abs(testVal) > Math.abs(pivotVal)
           pivotVal = testVal
           pivot = test
 
-      # Swap current row with pivot row.
-      temp = row[i]
-      row[i] = row[pivot]
-      row[pivot] = temp
+      # If pivot value is 0, things are bad.
+      det *= pivotVal
+      if pivotVal == 0
+        return det: 0
+
+      # Try to swap current row with pivot row.
+      # Negate the determinant, if rows are swapped.
+      if i != pivot
+        temp = row[i]
+        row[i] = row[pivot]
+        row[pivot] = temp
+        det = -det
 
       # Divide the pivot row so that pivot element would become 1.
       for j in [0...size] by 1
-        ind = m.index row[i], j
-        m.items[ind] /= pivotVal
-        inv.items[ind] /= pivotVal
+        ind = upper.index row[i], j
+        upper.items[ind] /= pivotVal
+        lower.items[ind] /= pivotVal
 
       # Subtract pivot row from rows below so that
       # elements under pivot become 0.
       for ii in [i + 1...size] by 1
-        k = m.get row[ii], i
+        k = upper.get row[ii], i
         for j in [0...size] by 1
-          ind = m.index row[ii], j
-          m.items[ind] -= k * m.get(row[i], j)
-          inv.items[ind] -= k * inv.get(row[i], j)
+          ind = upper.index row[ii], j
+          upper.items[ind] -= k * upper.get(row[i], j)
+          lower.items[ind] -= k * lower.get(row[i], j)
+
+    # Compose the final result.
+    upper: upper
+    lower: lower
+    perm: row
+    det: det
+
+  # Calculate the determinant of this matrix.
+  determinant: ->
+    decompose.call(@).det
+
+  # Alias for `determinant`:
+  det: @::determinant
+
+  # Calculate the inverse matrix.
+  inverse: ->
+    # Try decomposing the matrix and check if determinant is not 0.
+    {upper, lower, perm, det} = decompose.call @
+    if det < 1e-8
+      throw new Error 'Matrix is not invertible or is ill-conditioned'
 
     # Reduce the upper triangular matrix to identity matrix.
+    size = @rows
     for i in [size - 1..0] by -1
       for ii in [i - 1..0] by -1
-        k = m.get row[ii], i
+        k = upper.get perm[ii], i
         for j in [0...size] by 1
-          ind = m.index row[ii], j
-          m.items[ind] -= k * m.get(row[i], j)
-          inv.items[ind] -= k * inv.get(row[i], j)
+          ind = upper.index perm[ii], j
+          upper.items[ind] -= k * upper.get(perm[i], j)
+          lower.items[ind] -= k * lower.get(perm[i], j)
 
     # Compose the resulting matrix according to the state
     # of the indirect indexing array (move rows into place).
     res = new Matrix size, size
     for i in [0...size] by 1
       for j in [0...size] by 1
-        res.items[res.index i, j] = inv.items[inv.index row[i], j]
+        res.items[res.index i, j] = lower.items[lower.index perm[i], j]
     res
 
   # Alias for `inverse`:
