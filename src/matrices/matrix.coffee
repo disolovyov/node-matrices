@@ -15,6 +15,18 @@ module.exports = class Matrix
         items.push if i is j then 1 else 0
     new Matrix n, n, items
 
+  # Create a new permutation matrix based on row *perms* list.
+  @permutation: (perms, inverted = false) ->
+    items = []
+    n = perms.length
+    for i in [0...n] by 1
+      for j in [0...n] by 1
+        if inverted
+          items.push if perms[i] is j then 1 else 0
+        else
+          items.push if perms[j] is i then 1 else 0
+    new Matrix n, n, items
+
   # Get the index of the *ij* matrix element in the items array.
   index: (i, j) ->
     i * @cols + j
