@@ -258,7 +258,7 @@ module.exports = class Matrix
 
   # Multiply this matrix by the other matrix.
   # Column count in this matrix should be the same as row count in the other.
-  # Scalar multiplication is currently not implimented.
+  # Scalar multiplication is currently not implemented.
   multiply: (other) ->
     if @cols isnt other.rows
       throw new Error 'Dimensionality mismatch'
