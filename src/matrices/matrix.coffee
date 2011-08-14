@@ -80,6 +80,36 @@ module.exports = class Matrix
     selfT.items.push otherT.items...
     selfT.transpose()
 
+  # Get a matrix slice based on a range of rows.
+  # Extract up to but not including *end*.
+  sliceRows: (begin, end) ->
+    # Support negative and out of bounds indexes, just like array slices.
+    begin += @rows if begin < 0
+    begin = 0 if begin < 0
+    end ?= @rows
+    if end > @rows
+      end = @rows
+    else if end < 0
+      end += @rows
+    end = begin if end < begin
+
+    # Do the actual slice.
+    new Matrix end - begin, @cols, @items.slice(begin * @cols, end * @cols)
+
+  # Get a matrix slice based on a range of cols.
+  # Extract up to but not including *end*.
+  sliceCols: (begin, end) ->
+    end ?= @cols
+    @transpose().sliceRows(begin, end).transpose()
+
+  # Get a matrix slice based on ranges of cols and rows.
+  # This uses *sliceRows* and *sliceCols* logic.
+  slice: (beginCols, beginRows, endCols, endRows) ->
+    beginRows ?= 0
+    endCols ?= @cols
+    endRows ?= @rows
+    @sliceRows(beginRows, endRows).sliceCols(beginCols, endCols)
+
   # Calculate the inverse matrix.
   #
   # **NB!** Exceptions for noninvertible matrices are currently not thrown.
