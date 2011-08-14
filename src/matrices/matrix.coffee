@@ -205,7 +205,7 @@ module.exports = class Matrix
   inverse: ->
     # Try decomposing the matrix and check if determinant is not 0.
     {upper, lower, perm, det} = decompose.call @
-    if det < 1e-8
+    if -1e-8 < det < 1e-8
       throw new Error 'Matrix is not invertible or is ill-conditioned'
 
     # Reduce the upper triangular matrix to identity matrix.
