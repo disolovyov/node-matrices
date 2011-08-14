@@ -289,6 +289,13 @@ module.exports = class Matrix
     norm += item * item for item in @items
     norm / @items.length
 
+  # Test the equality of matrices with *eps* precision.
+  equal: (other, eps = 0) ->
+    @subtract(other).norm() <= e
+
+  # Alias for `equal`:
+  eq: @::equal
+
   # Pretty-printed string representation of this matrix.
   toString: ->
     s = ''
