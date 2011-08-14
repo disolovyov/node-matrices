@@ -282,11 +282,12 @@ module.exports = class Matrix
   # Alias for `divide`:
   div: @::divide
 
-  # Calculate the Euclidean norm of this matrix, sans the square root.
+  # Calculate the Euclidean norm of this matrix.
+  # Divide by matrix element count instead of square root.
   norm: ->
     norm = 0
     norm += item * item for item in @items
-    norm
+    norm / @items.length
 
   # Pretty-printed string representation of this matrix.
   toString: ->
