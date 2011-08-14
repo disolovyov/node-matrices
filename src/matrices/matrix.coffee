@@ -52,7 +52,7 @@ module.exports = class Matrix
     items = []
     for i in [0...@rows]
       for j in [0...@cols]
-        items.push @items[j * @rows + i]
+        items[j * @rows + i] = @get i, j
     new Matrix @cols, @rows, items
 
   # Aliases for `transpose`:
@@ -62,6 +62,23 @@ module.exports = class Matrix
   # Create a one-level deep copy of the current matrix.
   clone: ->
     new Matrix @rows, @cols, @items.slice(0)
+
+  # Create a new matrix by appending the columns of this
+  # and the other matrix.
+  # Both matrices should have the same row count.
+  #
+  # This isn't the most effective solution in terms of memory for
+  # large enough matrices, but cases of such matrices should be rare.
+  # Besides, they are probably sparse and should be treated
+  # in a different way.
+  augment: (other) ->
+    if @rows isnt other.rows
+      throw new Error 'Dimensionality mismatch'
+    selfT = @transpose()
+    otherT = other.transpose()
+    selfT.rows += otherT.rows
+    selfT.items.push otherT.items...
+    selfT.transpose()
 
   # Calculate the inverse matrix.
   #
