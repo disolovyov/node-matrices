@@ -4,9 +4,9 @@ To install matrices, do this:
 
     $ npm install matrices
 
-To get annotated source code, close this repository and then:
+To get annotated source code, clone this repository and use
+[Docco](http://jashkenas.github.com/docco/):
 
-    $ npm install beans -g
-    $ beans docs
+    $ docco src/*.coffee src/**/*.coffee
 
-A `docs` directory will be created in the working directory root.
+A `docs` directory should be created in the working directory root.
