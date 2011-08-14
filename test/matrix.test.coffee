@@ -14,6 +14,10 @@ permInv = Matrix.permutation [1, 2, 0], true
 permRows = new Matrix 3, 3, [4, 5, 6, 7, 8, 8, 1, 2, 3]
 permCols = new Matrix 3, 3, [2, 3, 1, 5, 6, 4, 8, 8, 7]
 
+# Slightly permissive equality check.
+closeEnough = (a, b) ->
+  -1e-8 < a - b < 1e-8
+
 module.exports =
   'indexing': (test) ->
     test.equal basic.index(2, 1), 7
@@ -24,4 +28,10 @@ module.exports =
     test.ok permNone.equal(ident)
     test.ok permRows.equal(permInv.multiply(basic))
     test.ok permCols.equal(basic.multiply(perm))
+    test.done()
+
+  'determinant calculation': (test) ->
+    test.ok closeEnough(basic.determinant(), 3)
+    test.ok closeEnough(zeroDet.determinant(), 0)
+    test.ok closeEnough(negDet.determinant(), -3)
     test.done()
