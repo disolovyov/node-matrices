@@ -2,7 +2,7 @@
   "author": "Dimitry Solovyov <dimituri@gmail.com> (http://100-hour.com)",
   "name": "matrices",
   "description": "Classes for matrix calculations.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "repository": {
     "type": "git",
     "url": "git://github.com/dimituri/node-matrices.git"

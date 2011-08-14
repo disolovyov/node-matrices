@@ -291,7 +291,7 @@ module.exports = class Matrix
 
   # Test the equality of matrices with *eps* precision.
   equal: (other, eps = 0) ->
-    @subtract(other).norm() <= e
+    @subtract(other).norm() <= eps
 
   # Alias for `equal`:
   eq: @::equal
