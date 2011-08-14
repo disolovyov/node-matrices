@@ -10,8 +10,8 @@ module.exports = class Matrix
   # Create a new identity matrix of size *n*.
   @identity: (n) ->
     items = []
-    for i in [0...n]
-      for j in [0...n]
+    for i in [0...n] by 1
+      for j in [0...n] by 1
         items.push if i is j then 1 else 0
     new Matrix n, n, items
 
@@ -37,7 +37,7 @@ module.exports = class Matrix
   #     m.project column(1), column(3)
   project: (fns...) ->
     items = []
-    for row in [0...@rows]
+    for row in [0...@rows] by 1
       for fn in fns
         ind = row * @cols
         items.push fn(@items.slice(ind, ind + @cols))
@@ -50,8 +50,8 @@ module.exports = class Matrix
   # Transpose the matrix (switch columns with rows).
   transpose: ->
     items = []
-    for i in [0...@rows]
-      for j in [0...@cols]
+    for i in [0...@rows] by 1
+      for j in [0...@cols] by 1
         items[j * @rows + i] = @get i, j
     new Matrix @cols, @rows, items
 
@@ -244,7 +244,7 @@ module.exports = class Matrix
     if @rows isnt other.rows or @cols isnt other.cols
       throw new Error 'Dimensionality mismatch'
     items = []
-    for i in [0...@items.length]
+    for i in [0...@items.length] by 1
       items.push @items[i] + other.items[i]
     new Matrix @rows, @cols, items
 
@@ -263,10 +263,10 @@ module.exports = class Matrix
     if @cols isnt other.rows
       throw new Error 'Dimensionality mismatch'
     items = []
-    for i in [0...@rows]
-      for j in [0...other.cols]
+    for i in [0...@rows] by 1
+      for j in [0...other.cols] by 1
         sum = 0
-        for k in [0...@cols]
+        for k in [0...@cols] by 1
           sum += @get(i, k) * other.get(k, j)
         items[i * other.cols + j] = sum
     new Matrix @rows, other.cols, items
