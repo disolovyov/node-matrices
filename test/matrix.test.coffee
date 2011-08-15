@@ -32,18 +32,18 @@ module.exports =
     test.done()
 
   'identity matrix': (test) ->
-    test.ok basic.inv().mul(basic).equal(ident, eps), 'basic'
-    test.ok edge.inv().mul(edge).equal(ident, eps), 'edge'
+    test.ok basic.inv().mul(basic).eq(ident, eps), 'basic'
+    test.ok edge.inv().mul(edge).eq(ident, eps), 'edge'
     test.done()
 
   'permutation matrix': (test) ->
-    test.ok permNone.equal(ident), 'neutral'
-    test.ok permRows.equal(permInv.multiply(basic)), 'rows'
-    test.ok permCols.equal(basic.multiply(perm)), 'cols'
+    test.ok permNone.eq(ident), 'neutral'
+    test.ok permRows.eq(permInv.mul(basic)), 'rows'
+    test.ok permCols.eq(basic.mul(perm)), 'cols'
     test.done()
 
   'determinant calculation': (test) ->
-    test.ok closeEnough(basic.determinant(), 3), 'positive'
-    test.ok closeEnough(zeroDet.determinant(), 0), 'zero'
-    test.ok closeEnough(negDet.determinant(), -3), 'negative'
+    test.ok closeEnough(basic.det(), 3), 'positive'
+    test.ok closeEnough(zeroDet.det(), 0), 'zero'
+    test.ok closeEnough(negDet.det(), -3), 'negative'
     test.done()

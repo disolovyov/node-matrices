@@ -46,8 +46,8 @@ module.exports = class Matrix
   # We can then create a new 2-column matrix from columns 1 and 3
   # of a 4-column matrix like so:
   #
-  #     m.project column(1), column(3)
-  project: (fns...) ->
+  #     m.proj column(1), column(3)
+  proj: (fns...) ->
     items = []
     for row in [0...@rows] by 1
       for fn in fns
@@ -55,21 +55,13 @@ module.exports = class Matrix
         items.push fn(@items.slice(ind, ind + @cols))
     new Matrix @rows, fns.length, items
 
-  # Aliases for `project`:
-  proj: @::project
-  select: @::project
-
   # Transpose the matrix (switch columns with rows).
-  transpose: ->
+  t: ->
     items = []
     for i in [0...@rows] by 1
       for j in [0...@cols] by 1
         items[j * @rows + i] = @get i, j
     new Matrix @cols, @rows, items
-
-  # Aliases for `transpose`:
-  transp: @::transpose
-  t: @::transpose
 
   # Create a one-level deep copy of the current matrix.
   clone: ->
@@ -86,11 +78,11 @@ module.exports = class Matrix
   augment: (other) ->
     if @rows isnt other.rows
       throw new Error 'Dimensionality mismatch'
-    selfT = @transpose()
-    otherT = other.transpose()
+    selfT = @t()
+    otherT = other.t()
     selfT.rows += otherT.rows
     selfT.items.push otherT.items...
-    selfT.transpose()
+    selfT.t()
 
   # Get a matrix slice based on a range of rows.
   # Extract up to but not including *end*.
@@ -112,7 +104,7 @@ module.exports = class Matrix
   # Extract up to but not including *end*.
   sliceCols: (begin, end) ->
     end ?= @cols
-    @transpose().sliceRows(begin, end).transpose()
+    @t().sliceRows(begin, end).t()
 
   # Get a matrix slice based on ranges of cols and rows.
   # This uses *sliceRows* and *sliceCols* logic.
@@ -207,14 +199,11 @@ module.exports = class Matrix
     det: det
 
   # Calculate the determinant of this matrix.
-  determinant: ->
+  det: ->
     decompose.call(@).det
 
-  # Alias for `determinant`:
-  det: @::determinant
-
   # Calculate the inverse matrix.
-  inverse: ->
+  inv: ->
     # Try decomposing the matrix and check if determinant is not 0.
     {upper, lower, perm, det} = decompose.call @
     if -1e-8 < det < 1e-8
@@ -238,16 +227,10 @@ module.exports = class Matrix
         res.items[res.index i, j] = lower.items[lower.index perm[i], j]
     res
 
-  # Alias for `inverse`:
-  inv: @::inverse
-
   # Negate the matrix (negate each element).
   # Essentially, this is -A where -A + A = 0 (zero matrix).
-  negate: ->
+  neg: ->
     new Matrix @rows, @cols, (-item for item in @items)
-
-  # Alias for `negate`:
-  neg: @::negate
 
   # Add this matrix to the other matrix (pairwise addition).
   # Both dimensions of operands should match.
@@ -262,16 +245,13 @@ module.exports = class Matrix
 
   # Subtract the other matrix from this matrix.
   # Essentialy, this is A + (-B).
-  subtract: (other) ->
-    @add other.negate()
-
-  # Alias for `subtract`:
-  sub: @::subtract
+  sub: (other) ->
+    @add other.neg()
 
   # Multiply this matrix by the other matrix.
   # Column count in this matrix should be the same as row count in the other.
   # Scalar multiplication is currently not implemented.
-  multiply: (other) ->
+  mul: (other) ->
     if @cols isnt other.rows
       throw new Error 'Dimensionality mismatch'
     items = []
@@ -283,16 +263,10 @@ module.exports = class Matrix
         items[i * other.cols + j] = sum
     new Matrix @rows, other.cols, items
 
-  # Alias for `multiply`:
-  mul: @::multiply
-
   # Divide this matrix by the other matrix.
   # Essentially, this is A * inverse of B.
-  divide: (other) ->
-    @mul other.inverse()
-
-  # Alias for `divide`:
-  div: @::divide
+  div: (other) ->
+    @mul other.inv()
 
   # Calculate the Euclidean norm of this matrix.
   # Divide by matrix element count instead of square root.
@@ -302,11 +276,8 @@ module.exports = class Matrix
     norm / @items.length
 
   # Test the equality of matrices with *eps* precision.
-  equal: (other, eps = 0) ->
-    @subtract(other).norm() <= eps
-
-  # Alias for `equal`:
-  eq: @::equal
+  eq: (other, eps = 0) ->
+    @sub(other).norm() <= eps
 
   # Pretty-printed string representation of this matrix.
   toString: ->
