@@ -20,18 +20,18 @@ closeEnough = (a, b) ->
 
 module.exports =
   'indexing': (test) ->
-    test.equal basic.index(2, 1), 7
-    test.equal basic.get(2, 1), 8
+    test.equal basic.index(2, 1), 7, 'index'
+    test.equal basic.get(2, 1), 8, 'get'
     test.done()
 
   'permutation matrix': (test) ->
-    test.ok permNone.equal(ident)
-    test.ok permRows.equal(permInv.multiply(basic))
-    test.ok permCols.equal(basic.multiply(perm))
+    test.ok permNone.equal(ident), 'neutral'
+    test.ok permRows.equal(permInv.multiply(basic)), 'rows'
+    test.ok permCols.equal(basic.multiply(perm)), 'cols'
     test.done()
 
   'determinant calculation': (test) ->
-    test.ok closeEnough(basic.determinant(), 3)
-    test.ok closeEnough(zeroDet.determinant(), 0)
-    test.ok closeEnough(negDet.determinant(), -3)
+    test.ok closeEnough(basic.determinant(), 3), 'positive'
+    test.ok closeEnough(zeroDet.determinant(), 0), 'zero'
+    test.ok closeEnough(negDet.determinant(), -3), 'negative'
     test.done()
