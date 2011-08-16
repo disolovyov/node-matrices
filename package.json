@@ -14,5 +14,13 @@
   "dependencies": {},
   "devDependencies": {
     "beans": "~0.2"
+  },
+  "scripts": {
+    "build": "beans build",
+    "clean": "beans clean",
+    "docs": "beans docs",
+    "publish": "beans publish",
+    "test": "beans test",
+    "watch": "beans watch"
   }
 }
