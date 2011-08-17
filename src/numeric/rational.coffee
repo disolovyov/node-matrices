@@ -19,22 +19,12 @@ module.exports = class Rational extends Number
   # Rational zero cached in the class body.
   #
   # **NB!** See the `Complex` class for a discussion on mutability.
-  zeroCached =
-    new @ 0
-
-  # Rational zero.
-  @zero: ->
-    zeroCached
+  @zero: new @ 0
 
   # Rational unit cached in the class body.
   #
   # **NB!** See the `Complex` class for a discussion on mutability.
-  unitCached =
-    new @ 1
-
-  # Rational unit.
-  @unit: ->
-    unitCached
+  @unit: new @ 1
 
   # Rational addition.
   @add: (a, b) ->

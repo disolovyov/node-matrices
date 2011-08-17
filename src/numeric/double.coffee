@@ -7,12 +7,10 @@ module.exports = class Double extends Number
     @n = n
 
   # Double zero.
-  @zero: ->
-    0
+  @zero: 0
 
   # Double unit.
-  @unit: ->
-    1
+  @unit: 1
 
   # Double addition.
   @add: (a, b) ->

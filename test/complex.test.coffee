@@ -6,8 +6,8 @@ c = new Complex 312, 25
 
 module.exports =
   'unit and zero': (test) ->
-    test.deepEqual Complex.zero(), new Complex(0, 0), 'zero'
-    test.deepEqual Complex.unit(), new Complex(1, 0), 'unit'
+    test.deepEqual Complex.zero, new Complex(0, 0), 'zero'
+    test.deepEqual Complex.unit, new Complex(1, 0), 'unit'
     test.done()
 
   'norm': (test) ->
@@ -28,7 +28,7 @@ module.exports =
   'multiplication': (test) ->
     test.deepEqual a.mul(a), b, 'mul'
     test.deepEqual b.div(a), a, 'div'
-    test.deepEqual Complex.unit().div(c).mul(c), Complex.unit(), 'unit'
+    test.deepEqual Complex.unit.div(c).mul(c), Complex.unit, 'unit'
     test.done()
 
   'absolute values': (test) ->

@@ -15,22 +15,12 @@ module.exports = class Complex extends Number
   #
   # Note that Object.freeze is not a solution right now, since this code
   # is used in the browser as well.
-  zeroCached =
-    new @ 0, 0
-
-  # Complex zero.
-  @zero: ->
-    zeroCached
+  @zero: new @ 0, 0
 
   # Complex unit cached in the class body.
   #
   # **NB!** Same problem as with cached zeroes.
-  unitCached =
-    new @ 1, 0
-
-  # Complex unit.
-  @unit: ->
-    unitCached
+  @unit: new @ 1, 0
 
   # Complex addition.
   @add: (a, b) ->

@@ -12,8 +12,8 @@ module.exports =
     test.done()
 
   'unit and zero': (test) ->
-    test.deepEqual Rational.zero(), new Rational(0, 1), 'zero'
-    test.deepEqual Rational.unit(), new Rational(1, 1), 'unit'
+    test.deepEqual Rational.zero, new Rational(0, 1), 'zero'
+    test.deepEqual Rational.unit, new Rational(1, 1), 'unit'
     test.done()
 
   'norm': (test) ->
@@ -34,7 +34,7 @@ module.exports =
   'multiplication': (test) ->
     test.deepEqual b.mul(b), a, 'mul'
     test.deepEqual a.div(b), b, 'div'
-    test.deepEqual Rational.unit().div(b).mul(b), Rational.unit(), 'unit'
+    test.deepEqual Rational.unit.div(b).mul(b), Rational.unit, 'unit'
     test.done()
 
   'absolute values': (test) ->

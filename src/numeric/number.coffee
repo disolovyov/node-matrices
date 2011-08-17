@@ -1,12 +1,10 @@
 # Abstract number class.
 module.exports = class Number
   # Algebraic zero.
-  @zero: ->
-    throw new Error 'Not implemented'
+  @zero: null
 
   # Algebraic unit.
-  @unit: ->
-    throw new Error 'Not implemented'
+  @unit: null
 
   # Algebraic addition.
   @add: (a, b) ->
