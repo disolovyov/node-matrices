@@ -166,12 +166,12 @@ module.exports = class Matrix
 
       # If pivot value is 0, things are bad.
       det *= pivotVal
-      if pivotVal == 0
+      if pivotVal is 0
         return det: 0
 
       # Try to swap current row with pivot row.
       # Negate the determinant, if rows are swapped.
-      if i != pivot
+      if i isnt pivot
         temp = row[i]
         row[i] = row[pivot]
         row[pivot] = temp
