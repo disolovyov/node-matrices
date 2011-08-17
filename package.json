@@ -13,7 +13,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "beans": "~0.2"
+    "beans": "~0.2",
+    "bench": "~0.3.2"
   },
   "scripts": {
     "build": "beans build",
