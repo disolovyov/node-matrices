@@ -13,7 +13,7 @@ module.exports = class Matrix
     for i in [0...n] by 1
       for j in [0...n] by 1
         items.push if i is j then 1 else 0
-    new Matrix n, n, items
+    new @ n, n, items
 
   # Create a new permutation matrix based on row *perms* list.
   @permutation: (perms, inverted = false) ->
@@ -25,7 +25,7 @@ module.exports = class Matrix
           items.push if perms[i] is j then 1 else 0
         else
           items.push if perms[j] is i then 1 else 0
-    new Matrix n, n, items
+    new @ n, n, items
 
   # Get the index of the *ij* matrix element in the items array.
   index: (i, j) ->
@@ -53,7 +53,7 @@ module.exports = class Matrix
       for fn in fns
         ind = row * @cols
         items.push fn(@items.slice(ind, ind + @cols))
-    new Matrix @rows, fns.length, items
+    new @constructor @rows, fns.length, items
 
   # Transpose the matrix (switch columns with rows).
   t: ->
@@ -61,11 +61,11 @@ module.exports = class Matrix
     for i in [0...@rows] by 1
       for j in [0...@cols] by 1
         items[j * @rows + i] = @get i, j
-    new Matrix @cols, @rows, items
+    new @constructor @cols, @rows, items
 
   # Create a one-level deep copy of the current matrix.
   clone: ->
-    new Matrix @rows, @cols, @items.slice(0)
+    new @constructor @rows, @cols, @items.slice(0)
 
   # Create a new matrix by appending the columns of this
   # and the other matrix.
@@ -98,7 +98,7 @@ module.exports = class Matrix
     end = begin if end < begin
 
     # Do the actual slice.
-    new Matrix end - begin, @cols, @items.slice(begin * @cols, end * @cols)
+    new @constructor end - begin, @cols, @items.slice(begin * @cols, end * @cols)
 
   # Get a matrix slice based on a range of cols.
   # Extract up to but not including *end*.
@@ -138,7 +138,7 @@ module.exports = class Matrix
     # of lower triangular matrix.
     size = @rows
     upper = @clone()
-    lower = Matrix.identity size
+    lower = @constructor.identity size
 
     # To avoid swapping rows in the matrix itself during pivoting,
     # a special array is used for indirect indexing.
@@ -207,7 +207,7 @@ module.exports = class Matrix
     # Try decomposing the matrix and check if determinant is not 0.
     {upper, lower, perm, det} = decompose.call @
     if -1e-8 < det < 1e-8
-      throw new Error 'Matrix is not invertible or is ill-conditioned'
+      throw new Error '@constructor is not invertible or is ill-conditioned'
 
     # Reduce the upper triangular matrix to identity matrix.
     size = @rows
@@ -221,7 +221,7 @@ module.exports = class Matrix
 
     # Compose the resulting matrix according to the state
     # of the indirect indexing array (move rows into place).
-    res = new Matrix size, size
+    res = new @constructor size, size
     for i in [0...size] by 1
       for j in [0...size] by 1
         res.items[res.index i, j] = lower.items[lower.index perm[i], j]
@@ -230,7 +230,7 @@ module.exports = class Matrix
   # Negate the matrix (negate each element).
   # Essentially, this is -A where -A + A = 0 (zero matrix).
   neg: ->
-    new Matrix @rows, @cols, (-item for item in @items)
+    new @constructor @rows, @cols, (-item for item in @items)
 
   # Add this matrix to the other matrix (pairwise addition).
   # Both dimensions of operands should match.
@@ -241,7 +241,7 @@ module.exports = class Matrix
     items = []
     for i in [0...@items.length] by 1
       items.push @items[i] + other.items[i]
-    new Matrix @rows, @cols, items
+    new @constructor @rows, @cols, items
 
   # Subtract the other matrix from this matrix.
   # Essentialy, this is A + (-B).
@@ -261,7 +261,7 @@ module.exports = class Matrix
         for k in [0...@cols] by 1
           sum += @get(i, k) * other.get(k, j)
         items[i * other.cols + j] = sum
-    new Matrix @rows, other.cols, items
+    new @constructor @rows, other.cols, items
 
   # Divide this matrix by the other matrix.
   # Essentially, this is A * inverse of B.
