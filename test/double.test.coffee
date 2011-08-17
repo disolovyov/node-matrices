@@ -1,4 +1,4 @@
-Double = require '../src/numeric/double.coffee'
+Double = require '../src/numeric/double'
 
 module.exports =
   'bare arithmetic': (test) ->

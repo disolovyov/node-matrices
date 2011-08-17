@@ -1,4 +1,4 @@
-Rational = require '../src/numeric/rational.coffee'
+Rational = require '../src/numeric/rational'
 
 a = new Rational 9, 16
 b = new Rational -3, 4

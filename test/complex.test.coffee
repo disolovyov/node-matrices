@@ -1,4 +1,4 @@
-Complex = require '../src/numeric/complex.coffee'
+Complex = require '../src/numeric/complex'
 
 a = new Complex 3, 4
 b = new Complex -7, 24
