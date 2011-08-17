@@ -59,5 +59,5 @@ module.exports = class Rational extends Number
     (n.num * n.num) / (n.denom * n.denom)
 
   # Equality measure.
-  @eql: (a, b) ->
+  @eq: (a, b) ->
     (a.num is b.num) and (a.denom is b.denom)

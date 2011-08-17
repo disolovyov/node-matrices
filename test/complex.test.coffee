@@ -43,6 +43,6 @@ module.exports =
     test.done()
 
   'equality': (test) ->
-    test.ok a.eql(a), 'equal'
-    test.ok not a.eql(b), 'not equal'
+    test.ok a.eq(a), 'equal'
+    test.ok not a.eq(b), 'not equal'
     test.done()

@@ -52,5 +52,5 @@ module.exports = class Complex extends Number
     n.re * n.re + n.im * n.im
 
   # Equality measure.
-  @eql: (a, b) ->
+  @eq: (a, b) ->
     (a.re is b.re) and (a.im is b.im)

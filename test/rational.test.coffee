@@ -48,7 +48,7 @@ module.exports =
     test.done()
 
   'equality': (test) ->
-    test.ok a.eql(a), 'equal'
-    test.ok not a.eql(b), 'not equal'
-    test.ok b.eql(new Rational(9, -12)), 'reduced'
+    test.ok a.eq(a), 'equal'
+    test.ok not a.eq(b), 'not equal'
+    test.ok b.eq(new Rational(9, -12)), 'reduced'
     test.done()
