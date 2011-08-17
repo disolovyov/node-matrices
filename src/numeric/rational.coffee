@@ -4,8 +4,17 @@ Number = require './number'
 module.exports = class Rational extends Number
   # Create a new rational number with *num* and *denom* parts.
   constructor: (num, denom = 1) ->
-    @num = num
-    @denom = denom
+    d = gcd num, denom
+    @num = num / d
+    @denom = denom / d
+
+  # Find greatest common divisor.
+  gcd = (a, b) ->
+    while b != 0
+      temp = a
+      a = b
+      b = temp % b
+    a
 
   # Rational zero cached in the class body.
   #
