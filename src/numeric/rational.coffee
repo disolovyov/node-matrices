@@ -57,3 +57,7 @@ module.exports = class Rational extends Number
   # Rational squared norm.
   @norm2: (n) ->
     (n.num * n.num) / (n.denom * n.denom)
+
+  # Equality measure.
+  @eql: (a, b) ->
+    (a.num is b.num) and (a.denom is b.denom)

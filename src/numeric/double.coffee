@@ -48,6 +48,10 @@ module.exports = class Double extends Number
   @norm2: (n) ->
     n * n
 
+  # Equality measure.
+  @eql: (a, b) ->
+    a is b
+
   # Instance methods for doubles are overriden to have return values
   # wrapped in new instance of `Double`. This is needed, since doubles
   # present a special case of `Number`, where static method results
@@ -64,3 +68,4 @@ module.exports = class Double extends Number
   conj: -> new @constructor @constructor.conj(@n)
   abs: -> new @constructor @constructor.abs(@n)
   norm2: -> new @constructor @constructor.norm2(@n)
+  eql: (other) -> new @constructor @constructor.eql(@n, other.n)

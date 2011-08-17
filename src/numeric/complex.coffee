@@ -50,3 +50,7 @@ module.exports = class Complex extends Number
   # Complex squared norm.
   @norm2: (n) ->
     n.re * n.re + n.im * n.im
+
+  # Equality measure.
+  @eql: (a, b) ->
+    (a.re is b.re) and (a.im is b.im)

@@ -46,3 +46,9 @@ module.exports =
     test.deepEqual a.conj(), a, 'positive num'
     test.deepEqual b.conj(), b, 'negative num'
     test.done()
+
+  'equality': (test) ->
+    test.ok a.eql(a), 'equal'
+    test.ok not a.eql(b), 'not equal'
+    test.ok b.eql(new Rational(9, -12)), 'reduced'
+    test.done()

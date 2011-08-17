@@ -41,3 +41,8 @@ module.exports =
     test.deepEqual a.conj(), new Complex(3, -4), 'positive re'
     test.deepEqual b.conj(), new Complex(-7, -24), 'negative re'
     test.done()
+
+  'equality': (test) ->
+    test.ok a.eql(a), 'equal'
+    test.ok not a.eql(b), 'not equal'
+    test.done()

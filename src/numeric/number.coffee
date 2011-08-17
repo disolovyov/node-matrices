@@ -42,6 +42,10 @@ module.exports = class Number
   @norm2: (n) ->
     throw new Error 'Not implemented'
 
+  # Equality measure.
+  @eql: (a, b) ->
+    throw new Error 'Not implemented'
+
   # Instance methods that wrap around static methods.
   # These are more convenient for one-line calculations.
   #
@@ -69,3 +73,4 @@ module.exports = class Number
   conj: -> @constructor.conj @
   abs: -> @constructor.abs @
   norm2: -> @constructor.norm2 @
+  eql: (other) -> @constructor.eql @, other
