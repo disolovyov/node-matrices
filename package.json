@@ -20,7 +20,6 @@
     "build": "beans build",
     "clean": "beans clean",
     "docs": "beans docs",
-    "publish": "beans publish",
     "test": "beans test",
     "watch": "beans watch"
   }
