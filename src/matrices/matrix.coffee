@@ -207,7 +207,7 @@ module.exports = class Matrix
     # Try decomposing the matrix and check if determinant is not 0.
     {upper, lower, perm, det} = decompose.call @
     if -1e-8 < det < 1e-8
-      throw new Error '@constructor is not invertible or is ill-conditioned'
+      throw new Error 'Matrix is not invertible or is ill-conditioned'
 
     # Reduce the upper triangular matrix to identity matrix.
     size = @rows
