@@ -9,8 +9,13 @@ algebraic = (op, first, second) ->
   nodes.second = second
   nodes
 
+# Constant values of numeric provider properties.
+constantFor =
+  unit: 1
+  zero: 0
+
 # Built-in equivalents for numeric provider methods.
-syntaxFor =
+operatorFor =
   add: '+'
   div: '/'
   eq: '=='
@@ -18,9 +23,10 @@ syntaxFor =
   neg: '-'
   sub: '-'
 
-# This hook optimizes GenericMatrix by replacing generic methods and properties
-# with double operators and constants. This effectively hard codes the Double
-# numeric provider directly into GenericMatrix.
+# This function is a Beans hook that optimizes GenericMatrix by replacing
+# generic methods and properties with double operators and constants.
+# This effectively hard codes the Double numeric provider directly into
+# GenericMatrix.
 module.exports = (filename, data) ->
   if matches = filename.match /^(.*)generic-matrix/
     # Create an AST based on provided tokens,
@@ -42,7 +48,7 @@ module.exports = (filename, data) ->
         switch op
           # Replace properties with constants.
           when 'unit', 'zero'
-            ctx.node.base.value = if op is 'unit' then 1 else 0
+            ctx.node.base.value = constantFor[op]
             ctx.node.properties = []
 
           # Change `abs` base to `Math`.
@@ -52,7 +58,7 @@ module.exports = (filename, data) ->
           # Replace methods with operators.
           when 'add', 'eq', 'div', 'mul', 'neg', 'sub'
             ctx = ctx.parent
-            ctx.node = algebraic syntaxFor[op], ctx.node.args...
+            ctx.node = algebraic operatorFor[op], ctx.node.args...
 
         # Apply modifications to context.
         ctx.update ctx.node
