@@ -21,6 +21,7 @@
     "build": "beans build",
     "clean": "beans clean",
     "docs": "beans docs",
+    "prepublish": "beans build",
     "test": "beans test",
     "watch": "beans watch"
   }
