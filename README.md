@@ -13,9 +13,10 @@ To install matrices, do this:
 
 This code uses the [Beans](https://github.com/dimituri/beans) toolset to build
 Node and browser JavaScript, as well as documentation. The easiset way to work
-on the source is by installing Beans:
+on the source is by installing dependencies and running Beans from there:
 
-    $ npm install beans -g
+    $ npm install
+    $ npm run-script build
 
 Otherwise you can use the CoffeeScript compiler to build things in a way you
 like, e.g. by running:
@@ -25,7 +26,11 @@ like, e.g. by running:
 # Documentation
 
 Another way to get annotated source code is to clone this repository and use
-[Docco](http://jashkenas.github.com/docco/):
+[Docco](http://jashkenas.github.com/docco/) with Beans:
+
+    $ npm run-script docs
+
+Or standalone:
 
     $ docco src/*.coffee src/**/*.coffee
 
