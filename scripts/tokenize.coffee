@@ -29,8 +29,13 @@ module.exports = (filename, data) ->
     nodes.expressions[0].value = nodes.expressions[0].value.body.expressions[0]
     ast = traverse nodes
 
-    # Replace numeric provider expressions with built-in algebra.
+    # Walk the AST.
     ast.forEach (node) ->
+      # Change class name to Matrix.
+      if node is 'GenericMatrix'
+        @update 'Matrix'
+
+      # Replace numeric provider expressions with built-in algebra.
       if node is 'numeric'
         ctx = @parent.parent
         op = ctx.node.properties[0].name.value
@@ -53,5 +58,5 @@ module.exports = (filename, data) ->
         ctx.update ctx.node
 
     # Write optimized AST to file.
-    fs.writeFileSync matches[1] + 'fast-matrix.js', nodes.compile bare: true
+    fs.writeFileSync matches[1] + 'matrix.js', nodes.compile bare: true
     return
