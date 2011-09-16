@@ -3,5 +3,8 @@
     "prefix": "node-"
   },
   "copyrightFrom": 2011,
-  "license": "MIT license"
+  "license": "MIT license",
+  "hooks": {
+    "tokenize": "scripts/tokenize"
+  }
 }
