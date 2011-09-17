@@ -1,5 +1,6 @@
 coffee   = require 'coffee-script'
 fs       = require 'fs'
+path     = require 'path'
 traverse = require 'traverse'
 
 # Create a new algebraic expression AST.
@@ -34,7 +35,7 @@ operatorFor =
 #
 #     $ coffee bench/matrix
 module.exports = (filename, data) ->
-  if matches = filename.match /^(.*)generic-matrix/
+  if matches = filename.match /^(.*)\/generic-matrix/
     # Create an AST based on provided tokens,
     # with its root set to the start of the class declaration.
     nodes = coffee.nodes data
@@ -70,5 +71,6 @@ module.exports = (filename, data) ->
         ctx.update ctx.node
 
     # Write optimized AST to file.
-    fs.writeFileSync matches[1] + 'matrix.js', nodes.compile bare: true
+    fs.mkdirSync matches[1], 0755 unless path.existsSync matches[1]
+    fs.writeFileSync matches[1] + '/matrix.js', nodes.compile bare: true
     return
