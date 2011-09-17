@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style type="text/css">
+    #canvas {
+      border: 1px solid #777;
+      margin: 40px;
+    }
+  </style>
+  <title>Autoregression</title>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="500"></canvas>
+  <script type="text/javascript" src="../build/edge/node-matrices.js"></script>
+  <script type="text/javascript">
+    var canvas = document.getElementById('canvas')
+      , ctx = canvas.getContext('2d')
+      , draw = false
+      , genericMatrix = require('matrices/generic-matrix')
+      , Complex = require('numeric/complex')
+      , ComplexMatrix = genericMatrix(Complex)
+      , pt = Complex.zero
+      , offset = Complex.zero
+      , I = new Complex(0, 1)
+      , sum = Complex.zero
+      , data = []
+      , rotor = 0
+      , count = Complex.zero
+      , BREADTH = 3
+      , DEPTH = 9
+      , W
+      , X = new ComplexMatrix(DEPTH, BREADTH)
+      , Y = new ComplexMatrix(DEPTH, 1)
+      , L = new ComplexMatrix (1, BREADTH)
+      , base = []
+      , predicted
+      , _ref
+      ;
+
+    for (var i = 0, _ref = BREADTH + DEPTH; i < _ref; i++) {
+      base[i] = new Complex(0, 0);
+    }
+
+    for (var i = 0; i < BREADTH; i++) {
+      L.items[i] = base[i + DEPTH];
+    }
+
+    for (var j = 0; j < BREADTH; i++) {
+      for (var i = 0; i < DEPTH; i++) {
+        X.items[X.index(i, j)] = base[i + j];
+      }
+    }
+
+    for (var i = 0; i < DEPTH; i++) {
+      Y.items[i] = base[i + BREADTH];
+    }
+
+    var shift = function() {
+      for (var i = 0, _ref = BREADTH + DEPTH - 1; i < _ref; i++) {
+        base[i].re = base[i + 1].re;
+        base[i].im = base[i + 1].im;
+      }
+    };
+
+    var put = function(z) {
+      shift();
+      base[BEADTH + DEPTH - 1].re = z.re;
+      base[BEADTH + DEPTH - 1].im = z.im;
+      Xt = X.t();
+      try {
+        W = Xt.mul(X).inv().mul(Xt.mul(Y));
+      } catch (e) {
+        console.log(e.message);
+      };
+    };
+
+    var predict = function() {
+      return L.mul(W).items[0];
+    }
+
+    var colors = {
+      gray: 'rgba(0,0,0,0.3)',
+      red: 'rgba(255,0,0,0.5)',
+      blue: 'rgba(0,96,255,0.5)',
+      black: 'rgba(0,0,0,0.7)'
+    };
+
+    var line = function(pt1, pt2, color) {
+      ctx.beginPath();
+      ctx.moveTo(pt1.re, pt1.im);
+      ctx.lineTo(pt2.re, pt2.im);
+      ctx.strokeStyle = color;
+      ctx.stroke();
+    };
+
+    var circ = function(pt, color) {
+      ctx.beginPath();
+      ctx.arc(pt.re, pt.im, 3, 0, Math.PI * 2);
+      ctx.strokeStyle = color;
+      ctx.stroke();
+    };
+
+    canvas.onmouseup = function() {
+      draw = false;
+    };
+
+    canvas.onmousedown = function(e) {
+      offset = new Complex(e.target.offsetLeft, e.target.offsetTop).neg();
+      pt = (new Complex(e.x, e.y)).add(offset);
+      predicted = pt;
+      draw = true;
+    };
+
+    canvas.onmousemove = function (e) {
+      if (draw) {
+        var ptNext = (new Complex(e.x, e.y)).add(offset);
+        var ptDiff = ptNext.sub(pt);
+        put(ptDiff);
+        var nextPred = pt.add(predict());
+        line(pt, ptNext, colors.gray);
+        line(predicted, nextPred, colors.blue);
+        //circ(nextPred, colors.blue);
+        pt = ptNext;
+        predicted = nextPred;
+      }
+    };
+  </script>
+</body>
+</html>
