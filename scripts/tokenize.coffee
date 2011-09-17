@@ -27,6 +27,12 @@ operatorFor =
 # generic methods and properties with double operators and constants.
 # This effectively hard codes the Double numeric provider directly into
 # GenericMatrix.
+#
+# Up to ~1.7 times performance gain over GenericMatrix with Double objects is
+# observed, when running the matrix benchmark (development dependencies must
+# be installed):
+#
+#     $ coffee bench/matrix
 module.exports = (filename, data) ->
   if matches = filename.match /^(.*)generic-matrix/
     # Create an AST based on provided tokens,
