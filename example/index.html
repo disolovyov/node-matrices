@@ -45,7 +45,7 @@
       L.items[i] = base[i + DEPTH];
     }
 
-    for (var j = 0; j < BREADTH; i++) {
+    for (var j = 0; j < BREADTH; j++) {
       for (var i = 0; i < DEPTH; i++) {
         X.items[X.index(i, j)] = base[i + j];
       }
@@ -64,8 +64,8 @@
 
     var put = function(z) {
       shift();
-      base[BEADTH + DEPTH - 1].re = z.re;
-      base[BEADTH + DEPTH - 1].im = z.im;
+      base[BREADTH + DEPTH - 1].re = z.re;
+      base[BREADTH + DEPTH - 1].im = z.im;
       Xt = X.t();
       try {
         W = Xt.mul(X).inv().mul(Xt.mul(Y));
