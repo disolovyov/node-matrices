@@ -17,9 +17,8 @@
     var canvas = document.getElementById('canvas')
       , ctx = canvas.getContext('2d')
       , draw = false
-      , genericMatrix = require('matrices/generic-matrix')
-      , Complex = require('numeric/complex')
-      , ComplexMatrix = genericMatrix(Complex)
+      , Complex = matrices.numeric.Complex
+      , ComplexMatrix = matrices.genericMatrix(Complex)
       , pt = Complex.zero
       , offset = Complex.zero
       , I = new Complex(0, 1)
