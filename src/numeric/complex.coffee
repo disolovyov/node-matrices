@@ -1,4 +1,5 @@
-Number = require './number'
+{freeze} = require '../helpers'
+Number   = require './number'
 
 # Complex numeric class.
 module.exports = class Complex extends Number
@@ -13,14 +14,13 @@ module.exports = class Complex extends Number
   # modifies this object. A good practice is to pretend that
   # complex number objects are immutable.
   #
-  # Note that Object.freeze is not a solution right now, since this code
-  # is used in the browser as well.
-  @zero: new @ 0, 0
+  # If available, Object.freeze is used to ensure immutability.
+  @zero: freeze new @ 0, 0
 
   # Complex unit cached in the class body.
   #
   # **NB!** Same problem as with cached zeroes.
-  @unit: new @ 1, 0
+  @unit: freeze new @ 1, 0
 
   # Complex addition.
   @add: (a, b) ->

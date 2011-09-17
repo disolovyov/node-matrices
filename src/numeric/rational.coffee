@@ -1,4 +1,5 @@
-Number = require './number'
+{freeze} = require '../helpers'
+Number   = require './number'
 
 # Rational numeric class.
 module.exports = class Rational extends Number
@@ -19,12 +20,12 @@ module.exports = class Rational extends Number
   # Rational zero cached in the class body.
   #
   # **NB!** See the `Complex` class for a discussion on mutability.
-  @zero: new @ 0
+  @zero: freeze new @ 0
 
   # Rational unit cached in the class body.
   #
   # **NB!** See the `Complex` class for a discussion on mutability.
-  @unit: new @ 1
+  @unit: freeze new @ 1
 
   # Rational addition.
   @add: (a, b) ->
